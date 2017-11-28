@@ -1,13 +1,15 @@
 var axios = require('axios');
 var fetch = require('node-fetch');
 var jsonfile = require('jsonfile');
-
+var express = require('express');
+var schedule = require('node-schedule');
 
 var apiKey = 'n3K9lqmL730FeNnei97Q';
 
 
 
-downloadAPIData();
+//downloadAPIData();
+
 
 
 
@@ -30,6 +32,25 @@ function downloadData(name){
       console.log('file downloaded: ' + name)
     })
 }
+var app = express();
+app.set('port', (process.env.PORT || 3000));
+app.listen(app.get('port'), function(){
+	console.log('Server started on port '+app.get('port'));
+});
+
+var rule = new schedule.RecurrenceRule();
+rule.minute = 12;
+
+var j = schedule.scheduleJob(rule, async function(){
+  console.log('scheduled run time')
+  var system = await os.platform();
+  var d = new Date();
+  if (d.getHours()===1){
+    downloadAPIData();
+  }
+});
+
+
 
 /*
 fetch('https://construct-pm.com/api/weather')
