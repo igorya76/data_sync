@@ -10,7 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
+    "express": "^4.16.2",
     "jsonfile": "^4.0.0",
-    "node-fetch": "^1.7.3"
+    "node-fetch": "^1.7.3",
+    "node-schedule": "^1.2.5"
   }
 }
