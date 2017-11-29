@@ -61,7 +61,7 @@ module.exports.returnMatching = function(query, callback){
 module.exports.returnMatchingRet = function(query){
   return Downloads.find(query, null, {date_iso: {number: -1}}, function(err, data){
     if(err){
-      return err
+      return console.log(err);
     } else {
       //console.log(data);
       return data
