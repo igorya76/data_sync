@@ -9,7 +9,7 @@ var apiKey = 'n3K9lqmL730FeNnei97Q';
 var Download = require('../models/downloads');
 
 module.exports.downloadAPIData = async function (type){
-let models = ['projects', 'pcco','milestone','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower']
+let models = ['projects', 'pcco','milestone','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles']
   for (var i = 0; i < models.length; i++){
     downloadData(models[i],type);
   }// model loop
