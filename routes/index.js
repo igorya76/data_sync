@@ -5,9 +5,10 @@ var Download = require('../models/downloads')
 
 router.get('/', async function(req, res){
   console.log('got it');
-  var sync = await Download.returnMatchingRet()
+  /*var sync = await Download.returnMatchingRet()
 
-  res.render('home/home', {data: sync})
+  res.render('home/home', {data: sync})*/
+  res.render('home/home')
 })
 
 router.get('/download', async function(req, res){
