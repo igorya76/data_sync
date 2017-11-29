@@ -1,65 +1,119 @@
-var axios = require('axios');
-var fetch = require('node-fetch');
-var jsonfile = require('jsonfile');
 var express = require('express');
-var schedule = require('node-schedule');
-
-var apiKey = 'n3K9lqmL730FeNnei97Q';
-
-
-
-//downloadAPIData();
-
-
-
-
-async function downloadAPIData(){
-let models = ['projects', 'pcco','milestone','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower']
-  for (var i = 0; i < models.length; i++){
-    downloadData(models[i]);
-  }// model loop
-}
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var exphbs = require('express-handlebars');
+var expressValidator = require('express-validator');
+var flash = require('connect-flash');
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var mongo = require('mongodb');
+var mongoose = require('mongoose');
+var os = require('os')
 
 
-function downloadData(name){
-  fetch('https://construct-pm.com/api/' + name + '/' + apiKey)
-    .then(function(res){
-      return res.json();
-    }).then(function(json){
-      var file = 'C:/Users/rigo/Dropbox/Tableau Reporting/custom_reporting/' + name + '.json'
-      var obj = json;
-      jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'}),
-      console.log('file downloaded: ' + name)
-    })
-}
+mongoose.connect('mongodb://localhost/data_extract', { useMongoClient: true });
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+
+// Init App
 var app = express();
+
+// View Engine
+app.set('views', path.join(__dirname, 'views'));
+app.engine('handlebars', exphbs({defaultLayout:'layout'}));
+app.set('view engine', 'handlebars');
+
+// BodyParser Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// Set Static Folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Express Session
+app.use(session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+}));
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Express Validator
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
+// Connect Flash
+app.use(flash());
+
+// Global Vars
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
+  next();
+});
+
+var routes = require('./routes/index');
+app.use('/', routes);
+
+// Set Port
 app.set('port', (process.env.PORT || 3000));
+
+
 app.listen(app.get('port'), function(){
 	console.log('Server started on port '+app.get('port'));
 });
 
+var schedule = require('node-schedule');
+
 var rule = new schedule.RecurrenceRule();
 rule.minute = 12;
 
+let downloads = require('./server/download');
 var j = schedule.scheduleJob(rule, async function(){
-  console.log('scheduled run time')
-  var system = await os.platform();
+  console.log('job scheudler')
   var d = new Date();
   if (d.getHours()===1){
-    downloadAPIData();
+    downloads.downloadAPIData('scheduled');
+  }
+
+});
+
+/*
+var j = schedule.scheduleJob({hour: 22, minute: 30}, async function(){
+  var system = await os.platform();
+  if(system != 'win32'){
+    sync.Run();
   }
 });
 
-
-
-/*
-fetch('https://construct-pm.com/api/weather')
-    .then(function(res) {
-        return res.json();
-    }).then(function(json) {
-        console.log(json);
-        var file = './data/weather.json';
-        var obj = json;
-        jsonfile.writeFile(file,obj , function(err){console.error(err)})
-    });
+var i = schedule.scheduleJob({hour: 11, minute: 45}, async function(){
+  var system = await os.platform();
+  if(system != 'win32'){
+    sync.Run();
+  }
+});
 */
+
+//console.log(os.platform())

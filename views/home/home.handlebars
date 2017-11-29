@@ -1,0 +1,21 @@
+<h4>Latest Sync Schedule</h4>
+<a href = 'download' class="waves-effect waves-light btn">Manual Sync</a>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each data}}
+    <tr>
+      <th>{{name}}</th>
+      <th>{{date}}</th>
+      <th>{{sync_type}}</th>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

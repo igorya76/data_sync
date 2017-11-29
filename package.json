@@ -13,6 +13,22 @@
     "express": "^4.16.2",
     "jsonfile": "^4.0.0",
     "node-fetch": "^1.7.3",
-    "node-schedule": "^1.2.5"
+    "node-schedule": "^1.2.5",
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.1",
+    "express-handlebars": "*",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "moment": "^2.18.1",
+    "mongodb": "*",
+    "mongoose": "*",
+    "nodemailer": "^4.3.1",
+    "nodemailer-express-handlebars": "^2.0.0",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*"
   }
 }
