@@ -11,15 +11,18 @@ var Download = require('../models/downloads');
 module.exports.downloadAPIData = async function (type){
 let models = ['projects', 'pcco','milestone','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles']
   for (var i = 0; i < models.length; i++){
-    downloadData(models[i],type);
+  var ti = await  downloadData(models[i],type);
+  console.log(ti);
   }// model loop
+
+  return 'loop completed'
 }
 
 
 
 
-function downloadData(name, type){
-  fetch('https://construct-pm.com/api/' + name + '/' + apiKey)
+async function downloadData(name, type){
+ return await fetch('https://construct-pm.com/api/' + name + '/' + apiKey)
     .then(function(res){
       return res.json();
     }).then(async function(json){
@@ -38,8 +41,7 @@ function downloadData(name, type){
         sync_type: type
       }
 
-      Download.addDownloads(data);
-
+      return Download.addDownloads(data);
     })
 }
 

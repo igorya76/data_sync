@@ -22,9 +22,9 @@ const DownloadsSchema = mongoose.Schema({
 let Downloads = module.exports = mongoose.model('Downloads', DownloadsSchema);
 
 
-module.exports.addDownloads = function(data){
+module.exports.addDownloads = async function(data){
     // Does Downloads Exist
-    newItem(data);
+    return await newItem(data);
 }
 
 module.exports.returnAll = function(callback){
@@ -86,13 +86,13 @@ module.exports.returnSingleRet = function(query, callback){
 
 function newItem(data){
   let d = new Downloads(data);
-  d.save(function(err){
+  return d.save(function(err){
     if(err){
       console.log(err);
       return
     } else {
       console.log('success updating')
-      return
+      return 'completed'
     }
   })
 };
