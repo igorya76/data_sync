@@ -9,11 +9,16 @@ var apiKey = 'n3K9lqmL730FeNnei97Q';
 var Download = require('../models/downloads');
 
 module.exports.downloadAPIData = async function (type){
-let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log']
+let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log','directory','safety_reports','safety_items']
   for (var i = 0; i < models.length; i++){
   var ti = await  downloadData(models[i],type);
   console.log(ti);
   }// model loop
+  //Export Sync Data to File
+  var downloads = await Download.returnAllret();
+  var file = 'C:/Users/rigo/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync.json'
+  var obj = downloads;
+  jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
 
   return 'loop completed'
 }
@@ -43,6 +48,7 @@ async function downloadData(name, type){
 
       return Download.addDownloads(data);
     })
+  
 }
 
 function getDate(type){
