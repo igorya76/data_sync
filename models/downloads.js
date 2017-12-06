@@ -37,8 +37,8 @@ module.exports.returnAll = function(callback){
   })
 }
 
-module.exports.returnAllret = function(callback){
-  Downloads.find({}, function(err, data){
+module.exports.returnAllret = function(){
+  return Downloads.find({}, function(err, data){
     if (err){
       return err
     } else {
