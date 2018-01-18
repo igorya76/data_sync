@@ -9,24 +9,24 @@ var apiKey = 'n3K9lqmL730FeNnei97Q';
 var Download = require('../models/downloads');
 
 module.exports.downloadAPIData = async function (type){
-let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log','directory','safety_reports','safety_items','dates',"commitments","prime_contracts",'procoreSyncLog', "logs",]
-
+let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log','directory','safety_reports','safety_items','dates',"commitments","prime_contracts",'procoreSyncLog', "logs", "meetings"]
+ //models = ['rfis'];
   for (var i = 0; i < models.length; i++){
   var ti = await  downloadData(models[i],type);
-  console.log(ti);
+//  console.log(ti);
   }// model loop
   //Export Sync Data to File
   var downloads = await Download.returnAllret();
   var file = 'C:/Users/rigo/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync.json'
   var obj = downloads;
-  console.log(downloads);
+  //console.log(downloads);
   jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
 
   return 'loop completed'
 }
 
 
-
+const rfis = require('./data_manipulation/rfis');
 
 async function downloadData(name, type){
  return await fetch('https://construct-pm.com/api/' + name + '/' + apiKey)
@@ -35,7 +35,7 @@ async function downloadData(name, type){
     }).then(async function(json){
       var file = 'C:/Users/rigo/Dropbox/Tableau Reporting/custom_reporting/' + name + '.json'
       var obj = json;
-      jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'}),
+      jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
       console.log('file downloaded: ' + name);
 
       var date_readable = await getDate('readable');
@@ -47,6 +47,15 @@ async function downloadData(name, type){
         date_iso: date_iso,
         sync_type: type
       }
+      console.log('entering switch', name)
+      //Allow for data manipulation
+      switch(name){
+        case 'rfis':
+          rfis.itemize_cfe_tracked(obj);
+        break;
+      }
+
+
 
       return Download.addDownloads(data);
     })
