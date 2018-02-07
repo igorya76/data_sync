@@ -10,7 +10,7 @@ var Download = require('../models/downloads');
 
 module.exports.downloadAPIData = async function (type){
 let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log','directory','safety_reports','safety_items','dates',"commitments","prime_contracts",'procoreSyncLog', "logs", "meetings"]
- //models = ['rfis'];
+ models = ['submittals'];
   for (var i = 0; i < models.length; i++){
   var ti = await  downloadData(models[i],type);
 //  console.log(ti);
@@ -27,13 +27,14 @@ let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittal
 
 
 const rfis = require('./data_manipulation/rfis');
+const submittals = require("./data_manipulation/submittals");
 
 async function downloadData(name, type){
  return await fetch('https://construct-pm.com/api/' + name + '/' + apiKey)
     .then(function(res){
       return res.json();
     }).then(async function(json){
-      var file = 'C:/Users/rigo/Dropbox/Tableau Reporting/custom_reporting/' + name + '.json'
+      var file = 'C:/Users/tableau/Dropbox/Tableau Reporting/custom_reporting/' + name + '.json'
       var obj = json;
       jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
       console.log('file downloaded: ' + name);
@@ -47,11 +48,16 @@ async function downloadData(name, type){
         date_iso: date_iso,
         sync_type: type
       }
-      console.log('entering switch', name)
+
       //Allow for data manipulation
       switch(name){
         case 'rfis':
+          console.log('Starting RFI Analytics');
           rfis.itemize_cfe_tracked(obj);
+        break;
+        case 'submittals':
+          console.log('Starting Submittal Analytics');
+          submittals.item_validation(obj);
         break;
       }
 
