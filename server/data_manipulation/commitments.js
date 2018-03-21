@@ -26,7 +26,7 @@ module.exports.itemize_cfe_tracked = async function(data){
     }// Close for loop
     console.log(itemized);
     //Write to JSON File
-    let file = 'C:/Users/rigo/Dropbox/Tableau Reporting/custom_reporting/commitments_tracked.json'
+    let file = 'C:/Users/tableau/Dropbox/Tableau Reporting/custom_reporting/commitments_tracked.json'
     jsonfile.writeFile(file, itemized,{spaces: 2, EOL: '\r\n'})
 
     return 'complete'

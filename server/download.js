@@ -17,7 +17,7 @@ let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittal
   }// model loop
   //Export Sync Data to File
   var downloads = await Download.returnAllret();
-  var file = 'C:/Users/rigo/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync.json'
+  var file = 'C:/Users/tableau/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync.json'
   var obj = downloads;
   //console.log(downloads);
   jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
