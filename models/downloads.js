@@ -16,6 +16,9 @@ const DownloadsSchema = mongoose.Schema({
   sync_type: {
     type: String,
     required: true
+  },
+  environment: {
+    type: String
   }
 });
 

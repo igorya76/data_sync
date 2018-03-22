@@ -1,6 +1,6 @@
 const jsonfile = require('jsonfile');
 
-module.exports.item_validation = async function(data){
+module.exports.item_validation = async function(data, env, user){
   let itemized = [];
 
   for (let i = 0; i < data.length; i++){
@@ -13,7 +13,7 @@ module.exports.item_validation = async function(data){
 
   //console.log(itemized);
 
-  let file = 'C:/Users/tableau/Dropbox/Tableau Reporting/custom_reporting/submittal_validation.json'
+  let file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/submittal_validation.json`
   jsonfile.writeFile(file, itemized,{spaces: 2, EOL: '\r\n'})
 
   return 'complete'

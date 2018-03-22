@@ -11,13 +11,17 @@ var Download = require('../models/downloads');
 module.exports.downloadAPIData = async function (type){
 let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log','directory','safety_reports','safety_items','dates',"commitments","prime_contracts",'procoreSyncLog', "logs", "meetings"]
  // /models = ['commitments'];
+
+  let user = 'tableau'
+
   for (var i = 0; i < models.length; i++){
-  var ti = await  downloadData(models[i],type);
+  var ti = await  downloadData(models[i],type, 'staging', user);
+  var ti = await downloadData(models[i], type, 'production', user);
 //  console.log(ti);
   }// model loop
   //Export Sync Data to File
   var downloads = await Download.returnAllret();
-  var file = 'C:/Users/tableau/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync.json'
+  var file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync.json`
   var obj = downloads;
   //console.log(downloads);
   jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
@@ -29,13 +33,26 @@ let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittal
 const rfis = require('./data_manipulation/rfis');
 const submittals = require("./data_manipulation/submittals");
 const commitments = require("./data_manipulation/commitments");
-async function downloadData(name, type){
- return await fetch('https://construct-pm.com/api/' + name + '/' + apiKey)
+
+async function downloadData(name, type, env, user){
+  let url = ''
+  switch(env){
+    case 'staging':
+      url = 'https://construct-pm.com/api/';
+      break;
+    case 'production':
+      url = 'https://cfe-tech.com/api/';
+      break;
+  }
+
+
+ return await fetch(url + name + '/' + apiKey)
     .then(function(res){
       return res.json();
     }).then(async function(json){
-      var file = 'C:/Users/tableau/Dropbox/Tableau Reporting/custom_reporting/' + name + '.json'
+      var file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/${name}.json`
       var obj = json;
+      console.log(file);
       jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
       console.log('file downloaded: ' + name);
 
@@ -46,22 +63,23 @@ async function downloadData(name, type){
         name: name,
         date: date_readable,
         date_iso: date_iso,
-        sync_type: type
+        sync_type: type,
+        environment: env
       }
 
       //Allow for data manipulation
       switch(name){
         case 'rfis':
           console.log('Starting RFI Analytics');
-          await rfis.itemize_cfe_tracked(obj);
+          await rfis.itemize_cfe_tracked(obj, env, user);
         break;
         case 'submittals':
           console.log('Starting Submittal Analytics');
-          await submittals.item_validation(obj);
+          await submittals.item_validation(obj, env, user);
         break;
         case 'commitments':
           console.log('Starting Commitment Analytics');
-          await commitments.itemize_cfe_tracked(obj);
+          await commitments.itemize_cfe_tracked(obj, env, user);
       }
 
 

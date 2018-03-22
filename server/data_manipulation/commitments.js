@@ -1,6 +1,6 @@
 const jsonfile = require('jsonfile');
 
-module.exports.itemize_cfe_tracked = async function(data){
+module.exports.itemize_cfe_tracked = async function(data, env, user){
   //Function creates new JSON file w/ RFIs broken down by Official Response, Tagged on Drawings, Distribution
     //These are additional items tracked - that need to be tracked for Reporting
     let itemized = [];
@@ -26,7 +26,7 @@ module.exports.itemize_cfe_tracked = async function(data){
     }// Close for loop
     console.log(itemized);
     //Write to JSON File
-    let file = 'C:/Users/tableau/Dropbox/Tableau Reporting/custom_reporting/commitments_tracked.json'
+    let file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/commitments_tracked.json`
     jsonfile.writeFile(file, itemized,{spaces: 2, EOL: '\r\n'})
 
     return 'complete'
