@@ -24,7 +24,9 @@ let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittal
   var file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync.json`
   var obj = downloads;
   //console.log(downloads);
-  jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
+  jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'}, function(err){
+    console.log('error with ' + file);
+  })
 
   return 'loop completed'
 }
