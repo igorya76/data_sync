@@ -15,7 +15,7 @@ let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittal
   let user = 'tableau'
 
   for (var i = 0; i < models.length; i++){
-  var ti = await  downloadData(models[i],type, 'staging', user);
+  //var ti = await  downloadData(models[i],type, 'staging', user);
   var ti = await downloadData(models[i], type, 'production', user);
 //  console.log(ti);
   }// model loop
@@ -43,7 +43,7 @@ async function downloadData(name, type, env, user){
       url = 'https://construct-pm.com/api/';
       break;
     case 'production':
-      url = 'https://cfe-tech.com/api/';
+      url = 'https://www.cfe-tech.com/api/';
       break;
   }
 
