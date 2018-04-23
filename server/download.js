@@ -3,6 +3,7 @@ var fetch = require('node-fetch');
 var jsonfile = require('jsonfile');
 var express = require('express');
 var schedule = require('node-schedule');
+const csv_export = require('./csv_export');
 
 var apiKey = 'n3K9lqmL730FeNnei97Q';
 
@@ -10,7 +11,7 @@ var Download = require('../models/downloads');
 
 module.exports.downloadAPIData = async function (type){
 let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log','directory','safety_reports','safety_items','dates',"commitments","prime_contracts",'procoreSyncLog', "logs", "meetings"]
- // /models = ['commitments'];
+ //models = ['submittals'];
 
   let user = 'tableau'
 
@@ -21,12 +22,14 @@ let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittal
   }// model loop
   //Export Sync Data to File
   var downloads = await Download.returnAllret();
-  var file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync.json`
+  var file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/dropbox_sync`
   var obj = downloads;
   //console.log(downloads);
-  jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'}, function(err){
+  jsonfile.writeFile(`${file}.json`, obj,{spaces: 2, EOL: '\r\n'}, function(err){
     console.log('error with ' + file);
   })
+
+
 
   return 'loop completed'
 }
@@ -52,11 +55,16 @@ async function downloadData(name, type, env, user){
     .then(function(res){
       return res.json();
     }).then(async function(json){
-      var file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/${name}.json`
+      var file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/${name}`
       var obj = json;
-      console.log(file);
-      jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'})
-      console.log('file downloaded: ' + name);
+
+      //JSON File
+      jsonfile.writeFile(file, obj,{spaces: 2, EOL: '\r\n'});
+
+      //Store to CSV
+      csv_export.add(file,name, obj);
+
+
 
       var date_readable = await getDate('readable');
       var date_iso = await getDate('iso')
@@ -78,6 +86,7 @@ async function downloadData(name, type, env, user){
         case 'submittals':
           console.log('Starting Submittal Analytics');
           await submittals.item_validation(obj, env, user);
+          await csv_export.add_unwind(file,'submittal_responses', obj);
         break;
         case 'commitments':
           console.log('Starting Commitment Analytics');

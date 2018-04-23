@@ -1,4 +1,6 @@
 const jsonfile = require('jsonfile');
+const Json2csvParser = require('json2csv').Parser;
+const fs = require('fs');
 
 module.exports.itemize_cfe_tracked = async function(data, env, user){
   //Function creates new JSON file w/ RFIs broken down by Official Response, Tagged on Drawings, Distribution
@@ -17,8 +19,20 @@ module.exports.itemize_cfe_tracked = async function(data, env, user){
     }// Close for loop
     //console.log(itemized);
     //Write to JSON File
-    let file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/rfi_cfe_tracked.json`
-    jsonfile.writeFile(file, itemized,{spaces: 2, EOL: '\r\n'})
+    let file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/rfi_cfe_tracked`
+    jsonfile.writeFile(`${file}.json`, itemized,{spaces: 2, EOL: '\r\n'})
+
+    let fields = ['id', 'number', 'subject', 'updated_at', 'status', 'time_resolved', 'company_id', 'project_id', 'type', 'completion']
+    const json = new Json2csvParser({fields, delimiter: ',', excelStrings: false});
+    let csv = json.parse(itemized);
+
+
+    fs.writeFile(`${file}.csv`, csv, function(err){
+      if(err) {console.log(err)}
+      console.log('saved!!!')
+    })
+
+    //csvdata.write(`${file}.csv`,csv,{delimiter: ','});
 
     return 'complete'
 }

@@ -1,4 +1,6 @@
 const jsonfile = require('jsonfile');
+const Json2csvParser = require('json2csv').Parser;
+const fs = require('fs');
 
 module.exports.item_validation = async function(data, env, user){
   let itemized = [];
@@ -13,8 +15,17 @@ module.exports.item_validation = async function(data, env, user){
 
   //console.log(itemized);
 
-  let file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/submittal_validation.json`
-  jsonfile.writeFile(file, itemized,{spaces: 2, EOL: '\r\n'})
+  let file = `C:/Users/${user}/Dropbox/Tableau Reporting/custom_reporting/${env}/submittal_validation`
+  jsonfile.writeFile(`${file}.json`, itemized,{spaces: 2, EOL: '\r\n'})
+
+  let fields = ['id','number', 'revision', 'title', 'project_id', 'validation_type', 'validation_status']
+  const json = new Json2csvParser({fields, delimiter: ',', excelStrings: false});
+  let csv = json.parse(itemized);
+
+  fs.writeFile(`${file}.csv`, csv, function(err){
+    if(err) {console.log(err)}
+    console.log('saved!!!')
+  })
 
   return 'complete'
 };
