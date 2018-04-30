@@ -62,7 +62,7 @@ async function downloadData(name, type, env, user){
       jsonfile.writeFile(`${file}.json`, obj,{spaces: 2, EOL: '\r\n'});
 
       //Store to CSV
-      csv_export.add(file,name, obj);
+      csv_export.add(`${file}.csv`,name, obj);
 
 
 
