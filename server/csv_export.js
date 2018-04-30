@@ -44,7 +44,7 @@ async function find_attr(name){
       return ['company_id', 'project_id', 'drawing_type', 'drawing_desc', 'required']
     case 'drawingsets':
       return ['id', 'project_id', 'name', 'craeted_at', 'updated_at', 'date', 'drawing_log_updated', 'cfe_review', 'shop_drawing_type', 'shop_DrawingSets', 'DrawingSets_distributed']
-    case 'drawing_sheets':
+    case 'drawingsheets':
       return ['drawing-date', 'drawing_id', 'id', 'number', 'pdf_url','png_url','title','updated_at','current','revision_number','tumbnail_url','large_thumbnail_url','zip_url','drawing_set.id','drawing_area.id','discipline.id','discipline.name','company_id','project_id','set_id', 'drawing_area_id']
     default:
       null
