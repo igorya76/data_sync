@@ -35,6 +35,11 @@ module.exports.add_unwind = async function(file,name, obj){
 async function find_attr(name){
   console.log(name);
   switch(name){
+    case 'commitments':
+      return ['id','project_id', 'company_id', 'source', 'actual_completion_date', 'contract_start_date', 'contract_estimated_completion_date', 'created_at', 'deleted_at', 'description','executed','inclusions', 'grand_total', 'number','pending_change_orders','pending_revised_contract','percentage_paid','private', 'remaining_balance_outstanding',
+      'requisitions_are_enabled','retainage_percentage','revised_contract','total','title', 'total_draw_request_amount', 'updated_at','vendor.id','vendor.company','commitment_type', 'signed_contract_recieved_date','safety_program_recieved', 'coi_approved', 'coi_expiration','contractors_license_files', 'business_license_recieved','comments','hold_payment','last_sync',
+      'link_document', 'wf_sync_date', 'primary_contact.vendor.name', 'primary_contact.name', 'primary_contact.permission_template.name', 'primary_contact.last_login_at'
+      ]
     case 'submittal_responses':
       return ['id', 'approvers.user.name', 'approvers.sent_date', 'approvers.returned_date', 'approvers.response.considered', 'approvers.distributed','approvers.comment', 'approver_type']
     case 'submittals':
