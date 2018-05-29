@@ -10,7 +10,7 @@ var apiKey = 'n3K9lqmL730FeNnei97Q';
 var Download = require('../models/downloads');
 
 module.exports.downloadAPIData = async function (type){
-let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log','directory','safety_reports','safety_items','dates',"commitments","prime_contracts",'procoreSyncLog', "logs", "meetings"]
+let models = ['projects', 'pcco','drawingsets','drawingsheets','rfis','submittals','shop_drawings','inspections','manpower','project_roles','document_watch_list','documents_monitored','parent','syncLog','milestones_current','milestones_log','directory','safety_reports','safety_items','dates',"commitments","prime_contracts",'procoreSyncLog', "logs", "meetings", "workflow", "workflow_history"]
  //models = ['submittals'];
 
   let user = 'tableau'
