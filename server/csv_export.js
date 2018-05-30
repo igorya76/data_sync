@@ -40,6 +40,8 @@ async function find_attr(name){
       'requisitions_are_enabled','retainage_percentage','revised_contract','total','title', 'total_draw_request_amount', 'updated_at','vendor.id','vendor.company','commitment_type', 'signed_contract_recieved_date','safety_program_recieved', 'coi_approved', 'coi_expiration','contractors_license_files', 'business_license_recieved','comments','hold_payment','last_sync',
       'link_document', 'wf_sync_date', 'primary_contact.vendor.name', 'primary_contact.name', 'primary_contact.permission_template.name', 'primary_contact.last_login_at'
       ]
+    case 'directory':
+      return ['address','business_phone','city','country_code','created_at','email_address','email-siganture','first_name','id','initials', 'is_active', 'is_employee', 'job_title','last_login_at', 'last_name', 'mobile_phone', 'notes', 'state_code', 'upadted_at', 'zip', 'permission_template.project_specific', 'permission_template.name','permission_template.name', 'vendor.name', 'vendor.id', 'project_id' ]
     case 'submittal_responses':
       return ['id', 'approvers.user.name', 'approvers.sent_date', 'approvers.returned_date', 'approvers.response.considered', 'approvers.distributed','approvers.comment', 'approver_type']
     case 'submittals':
